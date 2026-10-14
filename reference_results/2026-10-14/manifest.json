@@ -1,0 +1,151 @@
+{
+  "splits": {
+    "train": [
+      1,
+      2,
+      3,
+      4,
+      6
+    ],
+    "validation": [
+      8
+    ],
+    "dry_test": [
+      9,
+      11
+    ]
+  },
+  "features": [
+    "YawRate",
+    "LateralAccel",
+    "LongitudinalAccel",
+    "SteerAngle",
+    "Speed",
+    "WheelSlipFL",
+    "WheelSlipFR",
+    "WheelSlipRL",
+    "WheelSlipRR",
+    "Throttle",
+    "Brake",
+    "SlipDiff"
+  ],
+  "class_order": [
+    "Neutral",
+    "Understeer",
+    "Oversteer"
+  ],
+  "horizon_ms": 250,
+  "input_frames": 30,
+  "persistence_frames": 3,
+  "max_gap_ms": 50,
+  "scaler_source": "dry training windows only",
+  "class_weights": [
+    0.351135273425008,
+    8.194029850746269,
+    33.27272727272727
+  ],
+  "args": {
+    "epochs": 30,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "models": [
+      "lstm",
+      "rnn"
+    ],
+    "out": "results_future",
+    "prepare_only": false
+  },
+  "versions": {
+    "python": "3.14.2",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.4.2",
+    "pandas": "3.0.1"
+  },
+  "sha256": {
+    "data\\dry_laps.csv": "635650865b9f903925d0f50c2de8fb6962e8d69dd14d255ed4e51ebc7843c724",
+    "data\\wet_laps.csv": "a69b31ecfd21a60c5f3f97f364cc3aae043e0d525c6b43f56430d05d32ba78b4"
+  },
+  "train": {
+    "counts": [
+      12508,
+      536,
+      132
+    ],
+    "percentages": [
+      94.93017607771706,
+      4.068002428658167,
+      1.0018214936247722
+    ]
+  },
+  "validation": {
+    "counts": [
+      2350,
+      120,
+      21
+    ],
+    "percentages": [
+      94.33962264150944,
+      4.817342432757928,
+      0.8430349257326375
+    ]
+  },
+  "dry_test": {
+    "counts": [
+      4942,
+      251,
+      36
+    ],
+    "percentages": [
+      94.51137884872824,
+      4.800152992924077,
+      0.6884681583476764
+    ]
+  },
+  "wet_test": {
+    "laps": [
+      1,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "counts": [
+      19754,
+      916,
+      253
+    ]
+  },
+  "source_commit": "e7a34ea08d36052338cb1e1c44ded18e4a68970a",
+  "source_sha256": {
+    "audit_pipeline.py": "ebe3c2487bfe55870b5539f446deaefd2f86c607197a3e6b5842668c308db961",
+    "check_csv.py": "a5ea93151e5588d543ae99d212459f2a0c6a846031efc22c654a68cb33a0a8d6",
+    "dataset_lstm.py": "4cc040766a8e1442a67759253a43715df8e2cc16a050f692c5ca4b2f00f6350c",
+    "diagnose_samples.py": "aa4b6f916813ce2d26423379d37fec9ed344ce3302561de2f4bbcbc317479fda",
+    "model_lstm.py": "f8ac8fa75c244df9affa934bd4eecd9889cece3c4ffa0ee9423c45d0496ec57e",
+    "model_rnn.py": "6c1101f53e0e0b8c605edcf2e6db1f9ad5947c3c7b368175be900c7e8bbff11e",
+    "report_results.py": "12da98021501c13f025b6d67dfad0fa90345d91ad74c869aceb196e1b65187f7",
+    "testwet_lstm.py": "5bf4f073bf776c448f6b1d598de816d13c9985cca3cca1ee5af5d865c9bf4eeb",
+    "train_lstm.py": "4e1571a4cf7bcc321cecb46cfa6f0205d2187a5dcbdc409ba0f90bab7df6d787"
+  },
+  "simulation_controls": {
+    "car": "ferrari_458_gt2",
+    "track": "ks_laguna_seca",
+    "dry_road_air_celsius": [
+      36,
+      26
+    ],
+    "wet_road_air_celsius": [
+      20,
+      20
+    ]
+  }
+}

@@ -1,115 +1,101 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import DataLoader
-from dataset_lstm import DrivingTimeSeriesDataset
-from model_lstm import HandlingLSTM
+﻿"""Reproducible dry-only training and frozen dry/wet evaluation."""
+import argparse, copy, hashlib, json, random, platform
+from pathlib import Path
 import numpy as np
+import pandas as pd
+import torch
+from torch.utils.data import DataLoader
+from dataset_lstm import FEATURES, LABEL_MAP, SPLITS, read_csv, build_windows, DrivingTimeSeriesDataset
+from model_lstm import HandlingLSTM
+from model_rnn import HandlingRNN
 
-# ============================================================
-# SETTINGS — change these if needed
-# ============================================================
-DRY_CSV        = "data/dry_laps.csv"   # your dry training data
-SEQUENCE_LEN   = 30                    # 30 frames = 0.5 seconds at 60fps
-BATCH_SIZE     = 32
-EPOCHS         = 30
-LEARNING_RATE  = 0.001
-TRAIN_SPLIT    = 0.8                   # 80% train, 20% validation
-MODEL_SAVE     = "handling_lstm.pth"
-# ============================================================
+def metrics(y,p):
+    cm = np.zeros((3,3),dtype=int)
+    np.add.at(cm,(y,p),1)
+    precision = np.divide(cm.diagonal(),cm.sum(0),out=np.zeros(3),where=cm.sum(0)>0)
+    recall = np.divide(cm.diagonal(),cm.sum(1),out=np.zeros(3),where=cm.sum(1)>0)
+    f1 = np.divide(2*precision*recall,precision+recall,out=np.zeros(3),where=precision+recall>0)
+    r = {'accuracy':float(np.mean(y==p)), 'macro_f1':float(f1.mean()), 'confusion_matrix':cm.tolist()}
+    for i,name in enumerate(LABEL_MAP):
+        for key,val in [('precision',precision[i]),('recall',recall[i]),('f1',f1[i])]: r[name+'_'+key]=float(val)
+    return r
 
-# === LOAD DATASET ===
-print("Loading dry training data...")
-dataset = DrivingTimeSeriesDataset(DRY_CSV, sequence_length=SEQUENCE_LEN)
-
-# Split into train and validation
-train_size = int(TRAIN_SPLIT * len(dataset))
-val_size   = len(dataset) - train_size
-train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
-
-train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-val_loader   = DataLoader(val_dataset,   batch_size=BATCH_SIZE, shuffle=False)
-
-print(f"\nTrain samples: {train_size} | Val samples: {val_size}")
-
-# === HANDLE CLASS IMBALANCE ===
-# Neutral will dominate the dataset (most frames are neutral driving)
-# Weighted loss gives more penalty for getting understeer/oversteer wrong
-all_labels = dataset.labels.numpy()
-class_counts = np.bincount(all_labels)
-class_weights = 1.0 / (class_counts + 1e-8)
-class_weights = class_weights / class_weights.sum()
-weights_tensor = torch.tensor(class_weights, dtype=torch.float32)
-print(f"\nClass weights: Neutral={class_weights[0]:.3f}, Understeer={class_weights[1]:.3f}, Oversteer={class_weights[2]:.3f}")
-
-# === MODEL ===
-model     = HandlingLSTM(input_size=12, hidden_size=64, num_layers=2, output_size=3, dropout=0.3)
-criterion = nn.CrossEntropyLoss(weight=weights_tensor)
-optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
-
-print(f"\nModel parameters: {sum(p.numel() for p in model.parameters()):,}")
-print(f"Training for {EPOCHS} epochs...\n")
-
-# === TRAINING LOOP ===
-best_val_acc = 0.0
-
-for epoch in range(EPOCHS):
-    # --- Training ---
-    model.train()
-    total_loss = 0
-    for X_batch, y_batch in train_loader:
-        optimizer.zero_grad()
-        predictions = model(X_batch)
-        loss = criterion(predictions, y_batch)
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item()
-
-    # --- Validation ---
-    model.eval()
-    val_loss = 0
-    correct  = 0
-    total    = 0
-
-    # Track per-class accuracy
-    class_correct = [0, 0, 0]
-    class_total   = [0, 0, 0]
-
+def predict(model,loader):
+    model.eval(); result=[]
     with torch.no_grad():
-        for X_val, y_val in val_loader:
-            outputs   = model(X_val)
-            loss_val  = criterion(outputs, y_val)
-            val_loss += loss_val.item()
+        for x,_ in loader: result.extend(model(x).argmax(1).numpy().tolist())
+    return np.array(result)
 
-            _, predicted = torch.max(outputs, 1)
-            total   += y_val.size(0)
-            correct += (predicted == y_val).sum().item()
-
-            for c in range(3):
-                mask = (y_val == c)
-                class_correct[c] += (predicted[mask] == y_val[mask]).sum().item()
-                class_total[c]   += mask.sum().item()
-
-    val_acc = correct / total
-
-    # Save best model
-    if val_acc > best_val_acc:
-        best_val_acc = val_acc
-        torch.save(model.state_dict(), MODEL_SAVE)
-
-    # Print every epoch
-    print(f"Epoch {epoch+1:02d}/{EPOCHS} | "
-          f"Train Loss: {total_loss:.4f} | "
-          f"Val Loss: {val_loss:.4f} | "
-          f"Val Acc: {val_acc:.4f}")
-
-    # Print per-class breakdown every 5 epochs
-    if (epoch + 1) % 5 == 0:
-        for i, name in enumerate(["Neutral", "Understeer", "Oversteer"]):
-            if class_total[i] > 0:
-                acc = class_correct[i] / class_total[i]
-                print(f"   {name}: {acc:.4f} ({class_correct[i]}/{class_total[i]})")
-        print()
-
-print(f"\nBest validation accuracy: {best_val_acc:.4f}")
-print(f"Model saved to: {MODEL_SAVE}")
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument('--epochs',type=int,default=30); ap.add_argument('--seeds',type=int,nargs='+',default=[42,43,44,45,46])
+    ap.add_argument('--models',nargs='+',choices=['lstm','rnn'],default=['lstm','rnn'])
+    ap.add_argument('--out',default='results_future'); ap.add_argument('--prepare-only',action='store_true')
+    args=ap.parse_args(); out=Path(args.out); out.mkdir(exist_ok=True,parents=True)
+    torch.set_num_threads(4); torch.use_deterministic_algorithms(True)
+    dry=read_csv('data/dry_laps.csv')
+    assert set(dry.Lap.unique()) == set(sum(SPLITS.values(),[]))
+    assert len(sum(SPLITS.values(),[])) == len(set(sum(SPLITS.values(),[])))
+    raw={k:build_windows(dry,v) for k,v in SPLITS.items()}
+    mean=raw['train'][0].mean(axis=(0,1),dtype=np.float64)
+    std=raw['train'][0].std(axis=(0,1),dtype=np.float64); std[std<1e-8]=1
+    np.savez(out/'scaler.npz',mean=mean,std=std)
+    counts=np.bincount(raw['train'][1],minlength=3)
+    if np.any(counts==0): raise ValueError('Training split lacks a class')
+    weights=counts.sum()/(3*counts)
+    manifest={'splits':SPLITS,'features':FEATURES,'class_order':list(LABEL_MAP),'horizon_ms':250,'input_frames':30,'persistence_frames':3,'max_gap_ms':50,'scaler_source':'dry training windows only','class_weights':weights.tolist(),'args':vars(args),'versions':{'python':platform.python_version(),'torch':torch.__version__,'numpy':np.__version__,'pandas':pd.__version__},'sha256':{}}
+    for path in Path('data').glob('*.csv'): manifest['sha256'][str(path)]=hashlib.sha256(path.read_bytes()).hexdigest()
+    for k,(x,y,m) in raw.items():
+        c=np.bincount(y,minlength=3); print(k,'laps',SPLITS[k],'counts',c.tolist(),flush=True)
+        manifest[k]={'counts':c.tolist(),'percentages':(100*c/len(y)).tolist()}
+        pd.DataFrame(m).to_csv(out/(k+'_samples.csv'),index=False)
+    (out/'manifest.json').write_text(json.dumps(manifest,indent=2))
+    if args.prepare_only: return
+    ds={k:DrivingTimeSeriesDataset(x,y,mean,std) for k,(x,y,_) in raw.items()}
+    loaders={k:DataLoader(d,batch_size=32,shuffle=False) for k,d in ds.items()}
+    all_results=[]
+    # Finish and freeze every dry-selected checkpoint before loading wet telemetry.
+    for kind in args.models:
+        for seed in args.seeds:
+            random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
+            model=HandlingLSTM() if kind=='lstm' else HandlingRNN()
+            optimizer=torch.optim.Adam(model.parameters(),lr=0.001)
+            criterion=torch.nn.CrossEntropyLoss(weight=torch.tensor(weights,dtype=torch.float32))
+            train=DataLoader(ds['train'],batch_size=32,shuffle=True,generator=torch.Generator().manual_seed(seed))
+            best=float('inf'); history=[]; best_epoch=0
+            for epoch in range(1,args.epochs+1):
+                model.train(); total=0; denom=0
+                for x,y in train:
+                    optimizer.zero_grad(); loss=criterion(model(x),y); loss.backward(); optimizer.step()
+                    w=weights[y.numpy()].sum(); total+=loss.item()*w; denom+=w
+                model.eval(); vt=0; vd=0
+                with torch.no_grad():
+                    for x,y in loaders['validation']:
+                        w=weights[y.numpy()].sum(); vt+=criterion(model(x),y).item()*w; vd+=w
+                val=vt/vd; history.append({'epoch':epoch,'train_loss':total/denom,'validation_loss':val})
+                if val<best:
+                    best=val; best_epoch=epoch; state=copy.deepcopy(model.state_dict())
+                print(kind,seed,epoch,'val loss',round(val,5),flush=True)
+            torch.save({'state_dict':state,'kind':kind,'seed':seed,'best_epoch':best_epoch,'parameters':sum(p.numel() for p in model.parameters())},out/f'{kind}_{seed}.pth')
+            pd.DataFrame(history).to_csv(out/f'{kind}_{seed}_history.csv',index=False)
+    wet=read_csv('data/wet_laps.csv'); wx,wy,wm=build_windows(wet,sorted(wet.Lap.unique()))
+    pd.DataFrame(wm).to_csv(out/'wet_test_samples.csv',index=False)
+    loaders['wet_test']=DataLoader(DrivingTimeSeriesDataset(wx,wy,mean,std),batch_size=32)
+    manifest['wet_test']={'laps':sorted(int(v) for v in wet.Lap.unique()),'counts':np.bincount(wy,minlength=3).tolist()}
+    for kind in args.models:
+        for seed in args.seeds:
+            ck=torch.load(out/f'{kind}_{seed}.pth',weights_only=True)
+            model=HandlingLSTM() if kind=='lstm' else HandlingRNN(); model.load_state_dict(ck['state_dict'])
+            for domain in ['dry_test','wet_test']:
+                y=raw[domain][1] if domain=='dry_test' else wy
+                p=predict(model,loaders[domain]); r=metrics(y,p)
+                r.update(model=kind,seed=seed,domain=domain,best_epoch=ck['best_epoch'],parameters=ck['parameters'])
+                all_results.append(r)
+                pd.DataFrame({'target':y,'prediction':p}).to_csv(out/f'{kind}_{seed}_{domain}_predictions.csv',index=False)
+    (out/'metrics.json').write_text(json.dumps(all_results,indent=2))
+    table=pd.DataFrame([{k:v for k,v in r.items() if k!='confusion_matrix'} for r in all_results]); table.to_csv(out/'metrics.csv',index=False)
+    cols=[c for c in table if c not in ['model','seed','domain','best_epoch','parameters']]
+    table.groupby(['model','domain'])[cols].agg(['mean','std']).to_csv(out/'aggregate.csv')
+    (out/'manifest.json').write_text(json.dumps(manifest,indent=2))
+    print(table[['model','seed','domain','accuracy','macro_f1']].to_string(index=False),flush=True)
+if __name__=='__main__': main()

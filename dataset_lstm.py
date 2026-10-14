@@ -1,78 +1,44 @@
+﻿"""Past-only inputs; future labels never enter model features."""
+import numpy as np
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
-import pandas as pd
-import numpy as np
+LABEL_MAP = {'Neutral': 0, 'Understeer': 1, 'Oversteer': 2}
+FEATURES = ['YawRate','LateralAccel','LongitudinalAccel','SteerAngle','Speed','WheelSlipFL','WheelSlipFR','WheelSlipRL','WheelSlipRR','Throttle','Brake','SlipDiff']
+SPLITS = {'train':[1,2,3,4,6], 'validation':[8], 'dry_test':[9,11]}
+def read_csv(path):
+    d = pd.read_csv(path, sep=';')
+    if not d.Label.isin(LABEL_MAP).all() or not np.isfinite(d[FEATURES+['CurrentTime','Lap']].to_numpy()).all():
+        raise ValueError('Invalid telemetry/labels; cannot silently bridge missing rows')
+    return d
 
-# Label mapping — matches what the AC logger writes
-LABEL_MAP = {"Neutral": 0, "Understeer": 1, "Oversteer": 2}
-
-# Only physics-based features — no position, no track, no time
-# These match your actual CSV column names exactly
-FEATURES = [
-    "YawRate",
-    "LateralAccel",
-    "LongitudinalAccel",
-    "SteerAngle",
-    "Speed",
-    "WheelSlipFL",
-    "WheelSlipFR",
-    "WheelSlipRL",
-    "WheelSlipRR",
-    "Throttle",
-    "Brake",
-    "SlipDiff"
-]
-
-# 12 features total — update input_size in model and train to match
+def build_windows(df, laps, sequence_length=30, horizon_ms=250, persistence=3):
+    windows, targets, metadata = [], [], []
+    for lap in laps:
+        d = df[df.Lap == lap].sort_values('CurrentTime', kind='stable')
+        x = d[FEATURES].to_numpy(dtype=np.float32)
+        y = d.Label.map(LABEL_MAP).to_numpy()
+        t = d.CurrentTime.to_numpy()
+        for end in range(sequence_length-1, len(d)-1):
+            start = end-sequence_length+1
+            boundary = np.searchsorted(t, t[end]+horizon_ms, side='right')
+            if boundary == len(t): continue
+            delta = np.diff(t[start:boundary+1])
+            if np.any(delta <= 0) or np.any(delta > 50) or np.any(y[start:end+1] != 0): continue
+            target, onset = 0, None
+            for j in range(end+1, boundary-persistence+1):
+                if y[j] != 0 and y[j-1] != y[j] and np.all(y[j:j+persistence] == y[j]):
+                    target, onset = int(y[j]), float(t[j])
+                    break
+            assert t[end+1] > t[end]
+            windows.append(x[start:end+1]); targets.append(target)
+            metadata.append(dict(lap=int(lap), input_start_ms=float(t[start]), input_end_ms=float(t[end]), future_end_ms=float(t[end]+horizon_ms), onset_ms=onset, target=target, input_start_row=start, input_end_row=end, future_stop_row=int(boundary)))
+    if not windows: raise ValueError(f'No eligible windows for {laps}')
+    return np.stack(windows), np.array(targets,dtype=np.int64), metadata
 
 class DrivingTimeSeriesDataset(Dataset):
-    def __init__(self, csv_path, sequence_length=30):
-        """
-        csv_path: path to your log.csv
-        sequence_length: number of frames per input window (30 frames = 0.5s at 60fps)
-        """
-        # CSV uses semicolon delimiter
-        df = pd.read_csv(csv_path, delimiter=";")
-
-        # Convert string labels to integers
-        df["Label"] = df["Label"].map(LABEL_MAP)
-
-        # Drop any rows where label didn't map (shouldn't happen but just in case)
-        df = df.dropna(subset=["Label"])
-        df["Label"] = df["Label"].astype(int)
-
-        # Normalize features — zero mean, unit variance
-        # This is important so yaw rate and wheel slip are on the same scale
-        self.X = df[FEATURES].values.astype(np.float32)
-        self.X = (self.X - self.X.mean(axis=0)) / (self.X.std(axis=0) + 1e-8)
-
-        self.y = df["Label"].values
-
-        self.sequence_length = sequence_length
-
-        # Sliding window — each sample is sequence_length consecutive frames
-        # Label is taken from the last frame in the window (what is happening NOW)
-        self.sequences = []
-        self.labels = []
-
-        for i in range(len(self.X) - sequence_length):
-            seq = self.X[i:i + sequence_length]
-            label = self.y[i + sequence_length - 1]
-            self.sequences.append(seq)
-            self.labels.append(label)
-
-        self.sequences = torch.tensor(self.sequences, dtype=torch.float32)
-        self.labels = torch.tensor(self.labels, dtype=torch.long)
-
-        # Print class distribution so you can see if data is balanced
-        unique, counts = np.unique(self.y, return_counts=True)
-        label_names = {v: k for k, v in LABEL_MAP.items()}
-        print("Class distribution:")
-        for u, c in zip(unique, counts):
-            print(f"  {label_names[u]}: {c} ({100*c/len(self.y):.1f}%)")
-
-    def __len__(self):
-        return len(self.sequences)
-
-    def __getitem__(self, idx):
-        return self.sequences[idx], self.labels[idx]
+    def __init__(self, windows, labels, mean, std):
+        self.sequences = torch.from_numpy(((windows-mean)/std).astype(np.float32))
+        self.labels = torch.from_numpy(labels)
+    def __len__(self): return len(self.labels)
+    def __getitem__(self, i): return self.sequences[i], self.labels[i]
