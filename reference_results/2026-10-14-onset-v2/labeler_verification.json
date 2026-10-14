@@ -1,0 +1,55 @@
+{
+  "source_repository": "https://github.com/GTs5Devy/Assetto_Corsa_Telemetry_Extraction",
+  "github_commit": "1a76226bebad89aff838bb030d623078d9caeebf",
+  "excluded_warmup_rows_per_lap": 20,
+  "sources": {
+    "installed_v3": {
+      "path": "labeling_source/LapTimeML_installed_v3.py",
+      "sha256": "b75f3a545feab1d08b5dc9ff549bb50f1f2202ddf7b6d235cc22c9e3daf2ef1a",
+      "history_size": 20
+    },
+    "github_v2": {
+      "path": "labeling_source/LapTimeML_github_v2.py",
+      "sha256": "28d0177cc595339bc4e441b8a45447db36ee15fd9ad921ee408a6a47f7331fd5",
+      "history_size": 5
+    }
+  },
+  "results": [
+    {
+      "source": "installed_v3",
+      "domain": "dry",
+      "audited_rows": 41592,
+      "label_matches": 41592,
+      "gradient_matches": 41592,
+      "slipdiff_matches": 41752,
+      "raw_rows": 41752
+    },
+    {
+      "source": "installed_v3",
+      "domain": "wet",
+      "audited_rows": 47097,
+      "label_matches": 47097,
+      "gradient_matches": 47097,
+      "slipdiff_matches": 47277,
+      "raw_rows": 47277
+    },
+    {
+      "source": "github_v2",
+      "domain": "dry",
+      "audited_rows": 41592,
+      "label_matches": 39915,
+      "gradient_matches": 814,
+      "slipdiff_matches": 41752,
+      "raw_rows": 41752
+    },
+    {
+      "source": "github_v2",
+      "domain": "wet",
+      "audited_rows": 47097,
+      "label_matches": 45603,
+      "gradient_matches": 561,
+      "slipdiff_matches": 47277,
+      "raw_rows": 47277
+    }
+  ]
+}

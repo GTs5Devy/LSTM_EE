@@ -1,0 +1,64 @@
+[
+  {
+    "accuracy": 0.9366870696250956,
+    "macro_f1": 0.3224362139917695,
+    "confusion_matrix": [
+      [
+        4897,
+        0,
+        0
+      ],
+      [
+        291,
+        0,
+        0
+      ],
+      [
+        40,
+        0,
+        0
+      ]
+    ],
+    "Neutral_precision": 0.9366870696250956,
+    "Neutral_recall": 1.0,
+    "Neutral_f1": 0.9673086419753086,
+    "Understeer_precision": 0.0,
+    "Understeer_recall": 0.0,
+    "Understeer_f1": 0.0,
+    "Oversteer_precision": 0.0,
+    "Oversteer_recall": 0.0,
+    "Oversteer_f1": 0.0,
+    "domain": "dry_test"
+  },
+  {
+    "accuracy": 0.9355486492947646,
+    "macro_f1": 0.32223374997941473,
+    "confusion_matrix": [
+      [
+        19567,
+        0,
+        0
+      ],
+      [
+        1061,
+        0,
+        0
+      ],
+      [
+        287,
+        0,
+        0
+      ]
+    ],
+    "Neutral_precision": 0.9355486492947646,
+    "Neutral_recall": 1.0,
+    "Neutral_f1": 0.9667012499382442,
+    "Understeer_precision": 0.0,
+    "Understeer_recall": 0.0,
+    "Understeer_f1": 0.0,
+    "Oversteer_precision": 0.0,
+    "Oversteer_recall": 0.0,
+    "Oversteer_f1": 0.0,
+    "domain": "wet_test"
+  }
+]

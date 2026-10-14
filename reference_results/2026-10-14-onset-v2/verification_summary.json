@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "command": "python -m unittest -v test_pipeline",
+      "returncode": 0,
+      "stdout": "Synthetic onset, noise, horizon, persistence and lap-boundary tests passed\n",
+      "stderr": "Could not save font_manager cache [Errno 13] Permission denied: 'C:\\\\Users\\\\athar\\\\.matplotlib\\\\fontlist-v3.11.0.json.matplotlib-lock'\ntest_archive_output_is_rejected (test_pipeline.PipelineTests.test_archive_output_is_rejected) ... ok\ntest_confirmation_cannot_bridge_gap_or_lap_end (test_pipeline.PipelineTests.test_confirmation_cannot_bridge_gap_or_lap_end) ... ok\ntest_event_deduplication_and_false_warning_episodes (test_pipeline.PipelineTests.test_event_deduplication_and_false_warning_episodes) ... ok\ntest_exact_250ms_is_included_and_later_onset_excluded (test_pipeline.PipelineTests.test_exact_250ms_is_included_and_later_onset_excluded) ... ok\ntest_existing_sanity_suite (test_pipeline.PipelineTests.test_existing_sanity_suite) ... ok\ntest_last_frame_model_is_independent_of_history (test_pipeline.PipelineTests.test_last_frame_model_is_independent_of_history) ... ok\ntest_late_onset_and_future_input_separation (test_pipeline.PipelineTests.test_late_onset_and_future_input_separation) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.061s\n\nOK\n"
+    },
+    {
+      "command": "python audit_pipeline.py --results results_onset_v2",
+      "returncode": 0,
+      "stdout": "train unique eligible onsets {1: 46, 2: 16}\nvalidation unique eligible onsets {1: 11, 2: 2}\ndry_test unique eligible onsets {1: 23, 2: 4}\nwet_test unique eligible onsets {1: 90, 2: 33}\nSplit, scaler, weights, dry/wet input-neutrality, gaps, future targets and artifacts audit passed\n",
+      "stderr": ""
+    },
+    {
+      "command": "python check_csv.py",
+      "returncode": 0,
+      "stdout": "['Lap', 'CarModel', 'Track', 'TrackPos', 'CurrentTime', 'YawRate', 'LateralAccel', 'LongitudinalAccel', 'VerticalAccel', 'SteerAngle', 'Speed', 'LocalVelX', 'LocalVelY', 'LocalVelZ', 'WheelSlipFL', 'WheelSlipFR', 'WheelSlipRL', 'WheelSlipRR', 'Throttle', 'Brake', 'Gear', 'SurfaceGrip', 'RoadTemp', 'AirTemp', 'Heading', 'Pitch', 'Roll', 'CarX', 'CarY', 'CarZ', 'SlipDiff', 'YawGradient', 'Label']\n   Lap         CarModel           Track  ...  SlipDiff  YawGradient    Label\n0    1  ferrari_458_gt2  ks_laguna_seca  ...  0.097957          0.0  Neutral\n1    1  ferrari_458_gt2  ks_laguna_seca  ...  0.097530          0.0  Neutral\n\n[2 rows x 33 columns]\n",
+      "stderr": ""
+    },
+    {
+      "command": "python -m compileall -q dataset_lstm.py train_lstm.py experiment_config.py model_last_frame.py event_evaluation.py verify_labeler.py audit_pipeline.py diagnose_samples.py test_pipeline.py testwet_lstm.py report_results.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "reproduced_evaluations": 30,
+  "exact_saved_prediction_and_all_metric_reproduction": true,
+  "pre_run_source_hashes_match": true,
+  "archive_unchanged": true
+}

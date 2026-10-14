@@ -1,0 +1,1052 @@
+[
+  {
+    "accuracy": 0.8930757459831675,
+    "macro_f1": 0.5281303272633232,
+    "confusion_matrix": [
+      [
+        4505,
+        348,
+        44
+      ],
+      [
+        127,
+        149,
+        15
+      ],
+      [
+        25,
+        0,
+        15
+      ]
+    ],
+    "Neutral_precision": 0.9673609619926992,
+    "Neutral_recall": 0.9199509904022871,
+    "Neutral_f1": 0.9430604982206405,
+    "Understeer_precision": 0.29979879275653926,
+    "Understeer_recall": 0.5120274914089347,
+    "Understeer_f1": 0.3781725888324873,
+    "Oversteer_precision": 0.20270270270270271,
+    "Oversteer_recall": 0.375,
+    "Oversteer_f1": 0.2631578947368421,
+    "model": "lstm",
+    "seed": 42,
+    "domain": "dry_test",
+    "best_epoch": 8,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.8889313889552952,
+    "macro_f1": 0.5475048437481803,
+    "confusion_matrix": [
+      [
+        17778,
+        1532,
+        257
+      ],
+      [
+        330,
+        725,
+        6
+      ],
+      [
+        82,
+        116,
+        89
+      ]
+    ],
+    "Neutral_precision": 0.9773501924134139,
+    "Neutral_recall": 0.9085705524607758,
+    "Neutral_f1": 0.9417061736896469,
+    "Understeer_precision": 0.3055204382638011,
+    "Understeer_recall": 0.6833176248821866,
+    "Understeer_f1": 0.42224810716365757,
+    "Oversteer_precision": 0.2528409090909091,
+    "Oversteer_recall": 0.31010452961672474,
+    "Oversteer_f1": 0.2785602503912364,
+    "model": "lstm",
+    "seed": 42,
+    "domain": "wet_test",
+    "best_epoch": 8,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.895371078806427,
+    "macro_f1": 0.5197953531507844,
+    "confusion_matrix": [
+      [
+        4513,
+        305,
+        79
+      ],
+      [
+        127,
+        153,
+        11
+      ],
+      [
+        25,
+        0,
+        15
+      ]
+    ],
+    "Neutral_precision": 0.967416934619507,
+    "Neutral_recall": 0.9215846436593833,
+    "Neutral_f1": 0.9439447814264798,
+    "Understeer_precision": 0.33406113537117904,
+    "Understeer_recall": 0.5257731958762887,
+    "Understeer_f1": 0.40854472630173566,
+    "Oversteer_precision": 0.14285714285714285,
+    "Oversteer_recall": 0.375,
+    "Oversteer_f1": 0.20689655172413796,
+    "model": "lstm",
+    "seed": 43,
+    "domain": "dry_test",
+    "best_epoch": 16,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.8847238823810663,
+    "macro_f1": 0.567750344299972,
+    "confusion_matrix": [
+      [
+        17696,
+        1316,
+        555
+      ],
+      [
+        395,
+        613,
+        53
+      ],
+      [
+        73,
+        19,
+        195
+      ]
+    ],
+    "Neutral_precision": 0.974234750055054,
+    "Neutral_recall": 0.9043798231716665,
+    "Neutral_f1": 0.9380085340966314,
+    "Understeer_precision": 0.3146817248459959,
+    "Understeer_recall": 0.5777568331762488,
+    "Understeer_f1": 0.4074443336656697,
+    "Oversteer_precision": 0.24283935242839352,
+    "Oversteer_recall": 0.6794425087108014,
+    "Oversteer_f1": 0.3577981651376147,
+    "model": "lstm",
+    "seed": 43,
+    "domain": "wet_test",
+    "best_epoch": 16,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.821920428462127,
+    "macro_f1": 0.5063299923802501,
+    "confusion_matrix": [
+      [
+        4031,
+        574,
+        292
+      ],
+      [
+        50,
+        226,
+        15
+      ],
+      [
+        0,
+        0,
+        40
+      ]
+    ],
+    "Neutral_precision": 0.9877481009556481,
+    "Neutral_recall": 0.8231570349193383,
+    "Neutral_f1": 0.8979728224548899,
+    "Understeer_precision": 0.2825,
+    "Understeer_recall": 0.7766323024054983,
+    "Understeer_f1": 0.4142988084326305,
+    "Oversteer_precision": 0.11527377521613832,
+    "Oversteer_recall": 1.0,
+    "Oversteer_f1": 0.20671834625322996,
+    "model": "lstm",
+    "seed": 44,
+    "domain": "dry_test",
+    "best_epoch": 8,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.8219459717905809,
+    "macro_f1": 0.5092848945126929,
+    "confusion_matrix": [
+      [
+        16178,
+        2195,
+        1194
+      ],
+      [
+        213,
+        812,
+        36
+      ],
+      [
+        44,
+        42,
+        201
+      ]
+    ],
+    "Neutral_precision": 0.9843626407058108,
+    "Neutral_recall": 0.8268002248684009,
+    "Neutral_f1": 0.8987278484528637,
+    "Understeer_precision": 0.2663168251885864,
+    "Understeer_recall": 0.765315739868049,
+    "Understeer_f1": 0.39513381995133817,
+    "Oversteer_precision": 0.14046121593291405,
+    "Oversteer_recall": 0.7003484320557491,
+    "Oversteer_f1": 0.2339930151338766,
+    "model": "lstm",
+    "seed": 44,
+    "domain": "wet_test",
+    "best_epoch": 8,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.9099081866870696,
+    "macro_f1": 0.6050106405090286,
+    "confusion_matrix": [
+      [
+        4564,
+        299,
+        34
+      ],
+      [
+        117,
+        174,
+        0
+      ],
+      [
+        21,
+        0,
+        19
+      ]
+    ],
+    "Neutral_precision": 0.9706507868991918,
+    "Neutral_recall": 0.9319991831733715,
+    "Neutral_f1": 0.9509323887904989,
+    "Understeer_precision": 0.3678646934460888,
+    "Understeer_recall": 0.5979381443298969,
+    "Understeer_f1": 0.45549738219895286,
+    "Oversteer_precision": 0.3584905660377358,
+    "Oversteer_recall": 0.475,
+    "Oversteer_f1": 0.4086021505376344,
+    "model": "lstm",
+    "seed": 45,
+    "domain": "dry_test",
+    "best_epoch": 21,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.8932823332536457,
+    "macro_f1": 0.5966363327392,
+    "confusion_matrix": [
+      [
+        17781,
+        1341,
+        445
+      ],
+      [
+        323,
+        722,
+        16
+      ],
+      [
+        94,
+        13,
+        180
+      ]
+    ],
+    "Neutral_precision": 0.9770853939993406,
+    "Neutral_recall": 0.9087238718250115,
+    "Neutral_f1": 0.9416655633523103,
+    "Understeer_precision": 0.34778420038535646,
+    "Understeer_recall": 0.6804901036757776,
+    "Understeer_f1": 0.46031240038253113,
+    "Oversteer_precision": 0.28081123244929795,
+    "Oversteer_recall": 0.627177700348432,
+    "Oversteer_f1": 0.38793103448275856,
+    "model": "lstm",
+    "seed": 45,
+    "domain": "wet_test",
+    "best_epoch": 21,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.8775822494261668,
+    "macro_f1": 0.5556043246474393,
+    "confusion_matrix": [
+      [
+        4348,
+        482,
+        67
+      ],
+      [
+        57,
+        219,
+        15
+      ],
+      [
+        15,
+        4,
+        21
+      ]
+    ],
+    "Neutral_precision": 0.983710407239819,
+    "Neutral_recall": 0.8878905452317746,
+    "Neutral_f1": 0.9333476440914458,
+    "Understeer_precision": 0.31063829787234043,
+    "Understeer_recall": 0.7525773195876289,
+    "Understeer_f1": 0.43975903614457823,
+    "Oversteer_precision": 0.20388349514563106,
+    "Oversteer_recall": 0.525,
+    "Oversteer_f1": 0.2937062937062937,
+    "model": "lstm",
+    "seed": 46,
+    "domain": "dry_test",
+    "best_epoch": 9,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.849438202247191,
+    "macro_f1": 0.5444194712566487,
+    "confusion_matrix": [
+      [
+        16799,
+        2389,
+        379
+      ],
+      [
+        224,
+        831,
+        6
+      ],
+      [
+        56,
+        95,
+        136
+      ]
+    ],
+    "Neutral_precision": 0.983605597517419,
+    "Neutral_recall": 0.8585373332651914,
+    "Neutral_f1": 0.9168258472957485,
+    "Understeer_precision": 0.2506787330316742,
+    "Understeer_recall": 0.7832233741753063,
+    "Understeer_f1": 0.3797989031078611,
+    "Oversteer_precision": 0.26103646833013433,
+    "Oversteer_recall": 0.4738675958188153,
+    "Oversteer_f1": 0.3366336633663366,
+    "model": "lstm",
+    "seed": 46,
+    "domain": "wet_test",
+    "best_epoch": 9,
+    "parameters": 53443
+  },
+  {
+    "accuracy": 0.8127390971690895,
+    "macro_f1": 0.4899383528610461,
+    "confusion_matrix": [
+      [
+        3956,
+        820,
+        121
+      ],
+      [
+        14,
+        277,
+        0
+      ],
+      [
+        24,
+        0,
+        16
+      ]
+    ],
+    "Neutral_precision": 0.9904857285928893,
+    "Neutral_recall": 0.8078415356340617,
+    "Neutral_f1": 0.8898886514452817,
+    "Understeer_precision": 0.25250683682771197,
+    "Understeer_recall": 0.9518900343642611,
+    "Understeer_f1": 0.399135446685879,
+    "Oversteer_precision": 0.11678832116788321,
+    "Oversteer_recall": 0.4,
+    "Oversteer_f1": 0.18079096045197743,
+    "model": "rnn",
+    "seed": 42,
+    "domain": "dry_test",
+    "best_epoch": 3,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.7283767630886924,
+    "macro_f1": 0.48666261455888105,
+    "confusion_matrix": [
+      [
+        14043,
+        4939,
+        585
+      ],
+      [
+        34,
+        1008,
+        19
+      ],
+      [
+        61,
+        43,
+        183
+      ]
+    ],
+    "Neutral_precision": 0.9932805205828265,
+    "Neutral_recall": 0.7176879439873256,
+    "Neutral_f1": 0.8332888295505119,
+    "Understeer_precision": 0.1682804674457429,
+    "Understeer_recall": 0.9500471253534402,
+    "Understeer_f1": 0.28591689122110336,
+    "Oversteer_precision": 0.23252858958068615,
+    "Oversteer_recall": 0.6376306620209059,
+    "Oversteer_f1": 0.3407821229050279,
+    "model": "rnn",
+    "seed": 42,
+    "domain": "wet_test",
+    "best_epoch": 3,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8157995409334353,
+    "macro_f1": 0.544185343975181,
+    "confusion_matrix": [
+      [
+        3949,
+        799,
+        149
+      ],
+      [
+        13,
+        278,
+        0
+      ],
+      [
+        2,
+        0,
+        38
+      ]
+    ],
+    "Neutral_precision": 0.9962159434914228,
+    "Neutral_recall": 0.8064120890341026,
+    "Neutral_f1": 0.8913215212729941,
+    "Understeer_precision": 0.25812441968430827,
+    "Understeer_recall": 0.9553264604810997,
+    "Understeer_f1": 0.4064327485380117,
+    "Oversteer_precision": 0.20320855614973263,
+    "Oversteer_recall": 0.95,
+    "Oversteer_f1": 0.3348017621145375,
+    "model": "rnn",
+    "seed": 43,
+    "domain": "dry_test",
+    "best_epoch": 2,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.7216351900549844,
+    "macro_f1": 0.47082762818002816,
+    "confusion_matrix": [
+      [
+        13883,
+        4862,
+        822
+      ],
+      [
+        21,
+        1015,
+        25
+      ],
+      [
+        43,
+        49,
+        195
+      ]
+    ],
+    "Neutral_precision": 0.99541119954112,
+    "Neutral_recall": 0.7095109112280881,
+    "Neutral_f1": 0.8284895864414872,
+    "Understeer_precision": 0.17127910901113735,
+    "Understeer_recall": 0.9566446748350612,
+    "Understeer_f1": 0.290539573493631,
+    "Oversteer_precision": 0.1871401151631478,
+    "Oversteer_recall": 0.6794425087108014,
+    "Oversteer_f1": 0.29345372460496616,
+    "model": "rnn",
+    "seed": 43,
+    "domain": "wet_test",
+    "best_epoch": 2,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8171384850803366,
+    "macro_f1": 0.4743259371252004,
+    "confusion_matrix": [
+      [
+        4022,
+        745,
+        130
+      ],
+      [
+        42,
+        234,
+        15
+      ],
+      [
+        24,
+        0,
+        16
+      ]
+    ],
+    "Neutral_precision": 0.9838551859099804,
+    "Neutral_recall": 0.8213191750051052,
+    "Neutral_f1": 0.8952698942682248,
+    "Understeer_precision": 0.2390194075587334,
+    "Understeer_recall": 0.8041237113402062,
+    "Understeer_f1": 0.368503937007874,
+    "Oversteer_precision": 0.09937888198757763,
+    "Oversteer_recall": 0.4,
+    "Oversteer_f1": 0.15920398009950248,
+    "model": "rnn",
+    "seed": 44,
+    "domain": "dry_test",
+    "best_epoch": 5,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.7757112120487688,
+    "macro_f1": 0.48709498294426345,
+    "confusion_matrix": [
+      [
+        15150,
+        4088,
+        329
+      ],
+      [
+        80,
+        972,
+        9
+      ],
+      [
+        67,
+        118,
+        102
+      ]
+    ],
+    "Neutral_precision": 0.990390272602471,
+    "Neutral_recall": 0.7742627893903,
+    "Neutral_f1": 0.8690913262964662,
+    "Understeer_precision": 0.18771726535341832,
+    "Understeer_recall": 0.9161168708765316,
+    "Understeer_f1": 0.31158839557621415,
+    "Oversteer_precision": 0.2318181818181818,
+    "Oversteer_recall": 0.3554006968641115,
+    "Oversteer_f1": 0.28060522696011003,
+    "model": "rnn",
+    "seed": 44,
+    "domain": "wet_test",
+    "best_epoch": 5,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8498469778117828,
+    "macro_f1": 0.5053583165673013,
+    "confusion_matrix": [
+      [
+        4221,
+        578,
+        98
+      ],
+      [
+        73,
+        203,
+        15
+      ],
+      [
+        21,
+        0,
+        19
+      ]
+    ],
+    "Neutral_precision": 0.9782155272305909,
+    "Neutral_recall": 0.8619562997753727,
+    "Neutral_f1": 0.9164133738601824,
+    "Understeer_precision": 0.2599231754161332,
+    "Understeer_recall": 0.697594501718213,
+    "Understeer_f1": 0.37873134328358216,
+    "Oversteer_precision": 0.14393939393939395,
+    "Oversteer_recall": 0.475,
+    "Oversteer_f1": 0.22093023255813957,
+    "model": "rnn",
+    "seed": 45,
+    "domain": "dry_test",
+    "best_epoch": 12,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8218025340664595,
+    "macro_f1": 0.5270229957538836,
+    "confusion_matrix": [
+      [
+        16171,
+        2801,
+        595
+      ],
+      [
+        200,
+        839,
+        22
+      ],
+      [
+        67,
+        42,
+        178
+      ]
+    ],
+    "Neutral_precision": 0.9837571480715416,
+    "Neutral_recall": 0.8264424796851843,
+    "Neutral_f1": 0.898264129981947,
+    "Understeer_precision": 0.2278652906029332,
+    "Understeer_recall": 0.7907634307257304,
+    "Understeer_f1": 0.3537845245625132,
+    "Oversteer_precision": 0.2238993710691824,
+    "Oversteer_recall": 0.6202090592334495,
+    "Oversteer_f1": 0.3290203327171904,
+    "model": "rnn",
+    "seed": 45,
+    "domain": "wet_test",
+    "best_epoch": 12,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8601759755164499,
+    "macro_f1": 0.46529343343583734,
+    "confusion_matrix": [
+      [
+        4276,
+        552,
+        69
+      ],
+      [
+        62,
+        217,
+        12
+      ],
+      [
+        36,
+        0,
+        4
+      ]
+    ],
+    "Neutral_precision": 0.9775948788294467,
+    "Neutral_recall": 0.873187665917909,
+    "Neutral_f1": 0.922446338043361,
+    "Understeer_precision": 0.28218465539661897,
+    "Understeer_recall": 0.7457044673539519,
+    "Understeer_f1": 0.4094339622641509,
+    "Oversteer_precision": 0.047058823529411764,
+    "Oversteer_recall": 0.1,
+    "Oversteer_f1": 0.064,
+    "model": "rnn",
+    "seed": 46,
+    "domain": "dry_test",
+    "best_epoch": 13,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8229978484341381,
+    "macro_f1": 0.5475505668963478,
+    "confusion_matrix": [
+      [
+        16180,
+        3023,
+        364
+      ],
+      [
+        174,
+        867,
+        20
+      ],
+      [
+        75,
+        46,
+        166
+      ]
+    ],
+    "Neutral_precision": 0.984843873638079,
+    "Neutral_recall": 0.8269024377778913,
+    "Neutral_f1": 0.8989887765307256,
+    "Understeer_precision": 0.22027439024390244,
+    "Understeer_recall": 0.8171536286522149,
+    "Understeer_f1": 0.34700820492295376,
+    "Oversteer_precision": 0.3018181818181818,
+    "Oversteer_recall": 0.578397212543554,
+    "Oversteer_f1": 0.39665471923536433,
+    "model": "rnn",
+    "seed": 46,
+    "domain": "wet_test",
+    "best_epoch": 13,
+    "parameters": 13507
+  },
+  {
+    "accuracy": 0.8416220351951033,
+    "macro_f1": 0.5061233259542758,
+    "confusion_matrix": [
+      [
+        4136,
+        634,
+        127
+      ],
+      [
+        31,
+        245,
+        15
+      ],
+      [
+        21,
+        0,
+        19
+      ]
+    ],
+    "Neutral_precision": 0.9875835721107927,
+    "Neutral_recall": 0.8445987339187258,
+    "Neutral_f1": 0.9105118326912492,
+    "Understeer_precision": 0.2787258248009101,
+    "Understeer_recall": 0.8419243986254296,
+    "Understeer_f1": 0.4188034188034188,
+    "Oversteer_precision": 0.11801242236024845,
+    "Oversteer_recall": 0.475,
+    "Oversteer_f1": 0.1890547263681592,
+    "model": "last_frame",
+    "seed": 42,
+    "domain": "dry_test",
+    "best_epoch": 5,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.7567296198900311,
+    "macro_f1": 0.4945435138976773,
+    "confusion_matrix": [
+      [
+        14649,
+        4304,
+        614
+      ],
+      [
+        34,
+        1004,
+        23
+      ],
+      [
+        64,
+        49,
+        174
+      ]
+    ],
+    "Neutral_precision": 0.9933545805926629,
+    "Neutral_recall": 0.7486584555629376,
+    "Neutral_f1": 0.8538205980066446,
+    "Understeer_precision": 0.18741833115549747,
+    "Understeer_recall": 0.946277097078228,
+    "Understeer_f1": 0.312870052976005,
+    "Oversteer_precision": 0.21454993834771888,
+    "Oversteer_recall": 0.6062717770034843,
+    "Oversteer_f1": 0.31693989071038253,
+    "model": "last_frame",
+    "seed": 42,
+    "domain": "wet_test",
+    "best_epoch": 5,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.8626625860749809,
+    "macro_f1": 0.5274600294389231,
+    "confusion_matrix": [
+      [
+        4269,
+        524,
+        104
+      ],
+      [
+        56,
+        220,
+        15
+      ],
+      [
+        19,
+        0,
+        21
+      ]
+    ],
+    "Neutral_precision": 0.9827348066298343,
+    "Neutral_recall": 0.8717582193179497,
+    "Neutral_f1": 0.923925982036576,
+    "Understeer_precision": 0.2956989247311828,
+    "Understeer_recall": 0.7560137457044673,
+    "Understeer_f1": 0.42512077294685996,
+    "Oversteer_precision": 0.15,
+    "Oversteer_recall": 0.525,
+    "Oversteer_f1": 0.2333333333333333,
+    "model": "last_frame",
+    "seed": 43,
+    "domain": "dry_test",
+    "best_epoch": 9,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.805785321539565,
+    "macro_f1": 0.523360142775465,
+    "confusion_matrix": [
+      [
+        15732,
+        3210,
+        625
+      ],
+      [
+        100,
+        940,
+        21
+      ],
+      [
+        64,
+        42,
+        181
+      ]
+    ],
+    "Neutral_precision": 0.9896829391041772,
+    "Neutral_recall": 0.8040067460520264,
+    "Neutral_f1": 0.8872345825226293,
+    "Understeer_precision": 0.22423664122137404,
+    "Understeer_recall": 0.885956644674835,
+    "Understeer_f1": 0.35789072910717684,
+    "Oversteer_precision": 0.218863361547763,
+    "Oversteer_recall": 0.6306620209059234,
+    "Oversteer_f1": 0.32495511669658894,
+    "model": "last_frame",
+    "seed": 43,
+    "domain": "wet_test",
+    "best_epoch": 9,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.8437260902830911,
+    "macro_f1": 0.5038058152378813,
+    "confusion_matrix": [
+      [
+        4155,
+        646,
+        96
+      ],
+      [
+        36,
+        240,
+        15
+      ],
+      [
+        24,
+        0,
+        16
+      ]
+    ],
+    "Neutral_precision": 0.9857651245551602,
+    "Neutral_recall": 0.8484786604043292,
+    "Neutral_f1": 0.9119841966637402,
+    "Understeer_precision": 0.2708803611738149,
+    "Understeer_recall": 0.8247422680412371,
+    "Understeer_f1": 0.4078164825828378,
+    "Oversteer_precision": 0.12598425196850394,
+    "Oversteer_recall": 0.4,
+    "Oversteer_f1": 0.19161676646706585,
+    "model": "last_frame",
+    "seed": 44,
+    "domain": "dry_test",
+    "best_epoch": 7,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.7726990198422184,
+    "macro_f1": 0.49011211203720517,
+    "confusion_matrix": [
+      [
+        15044,
+        3928,
+        595
+      ],
+      [
+        72,
+        968,
+        21
+      ],
+      [
+        69,
+        69,
+        149
+      ]
+    ],
+    "Neutral_precision": 0.9907145209087915,
+    "Neutral_recall": 0.7688455051873052,
+    "Neutral_f1": 0.865791896869245,
+    "Understeer_precision": 0.19496475327291038,
+    "Understeer_recall": 0.9123468426013195,
+    "Understeer_f1": 0.3212744772651842,
+    "Oversteer_precision": 0.19477124183006536,
+    "Oversteer_recall": 0.519163763066202,
+    "Oversteer_f1": 0.2832699619771863,
+    "model": "last_frame",
+    "seed": 44,
+    "domain": "wet_test",
+    "best_epoch": 7,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.8263198163733741,
+    "macro_f1": 0.49353119692786257,
+    "confusion_matrix": [
+      [
+        4045,
+        703,
+        149
+      ],
+      [
+        20,
+        256,
+        15
+      ],
+      [
+        21,
+        0,
+        19
+      ]
+    ],
+    "Neutral_precision": 0.9899657366617719,
+    "Neutral_recall": 0.8260159281192567,
+    "Neutral_f1": 0.9005900033396416,
+    "Understeer_precision": 0.2669447340980188,
+    "Understeer_recall": 0.8797250859106529,
+    "Understeer_f1": 0.40959999999999996,
+    "Oversteer_precision": 0.10382513661202186,
+    "Oversteer_recall": 0.475,
+    "Oversteer_f1": 0.1704035874439462,
+    "model": "last_frame",
+    "seed": 45,
+    "domain": "dry_test",
+    "best_epoch": 6,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.7426249103514224,
+    "macro_f1": 0.482094992474207,
+    "confusion_matrix": [
+      [
+        14350,
+        4555,
+        662
+      ],
+      [
+        29,
+        1011,
+        21
+      ],
+      [
+        61,
+        55,
+        171
+      ]
+    ],
+    "Neutral_precision": 0.9937673130193906,
+    "Neutral_recall": 0.7333776255941126,
+    "Neutral_f1": 0.8439438939041962,
+    "Understeer_precision": 0.1798612346557552,
+    "Understeer_recall": 0.9528746465598492,
+    "Understeer_f1": 0.30260401077521704,
+    "Oversteer_precision": 0.20023419203747073,
+    "Oversteer_recall": 0.5958188153310104,
+    "Oversteer_f1": 0.2997370727432077,
+    "model": "last_frame",
+    "seed": 45,
+    "domain": "wet_test",
+    "best_epoch": 6,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.8349273144605968,
+    "macro_f1": 0.5047477218406898,
+    "confusion_matrix": [
+      [
+        4095,
+        707,
+        95
+      ],
+      [
+        23,
+        253,
+        15
+      ],
+      [
+        23,
+        0,
+        17
+      ]
+    ],
+    "Neutral_precision": 0.9888915720840377,
+    "Neutral_recall": 0.8362262609761079,
+    "Neutral_f1": 0.906173932285904,
+    "Understeer_precision": 0.2635416666666667,
+    "Understeer_recall": 0.8694158075601375,
+    "Understeer_f1": 0.40447641886490804,
+    "Oversteer_precision": 0.13385826771653545,
+    "Oversteer_recall": 0.425,
+    "Oversteer_f1": 0.20359281437125748,
+    "model": "last_frame",
+    "seed": 46,
+    "domain": "dry_test",
+    "best_epoch": 6,
+    "parameters": 1027
+  },
+  {
+    "accuracy": 0.7539564905570165,
+    "macro_f1": 0.491915698180536,
+    "confusion_matrix": [
+      [
+        14606,
+        4415,
+        546
+      ],
+      [
+        37,
+        1002,
+        22
+      ],
+      [
+        68,
+        58,
+        161
+      ]
+    ],
+    "Neutral_precision": 0.9928624838556183,
+    "Neutral_recall": 0.7464608780088925,
+    "Neutral_f1": 0.8522084135597175,
+    "Understeer_precision": 0.18301369863013697,
+    "Understeer_recall": 0.944392082940622,
+    "Understeer_f1": 0.306609547123623,
+    "Oversteer_precision": 0.22085048010973937,
+    "Oversteer_recall": 0.5609756097560976,
+    "Oversteer_f1": 0.3169291338582677,
+    "model": "last_frame",
+    "seed": 46,
+    "domain": "wet_test",
+    "best_epoch": 6,
+    "parameters": 1027
+  }
+]

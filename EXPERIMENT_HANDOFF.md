@@ -1,3 +1,5 @@
+> Historical onset-v1 handoff. The original completed results remain untouched in reference_results/2026-10-14/. The corrected onset-v2 protocol is in PROTOCOL_V2.md, recovered labeler evidence is in PHYSICS_LABELER.md, and the new detailed results will be in REVISION_REPORT.md. Statements below about an unavailable labeler and within-horizon confirmation describe the earlier experiment.
+
 # Complete experiment handoff: future handling-onset prediction
 
 Repository: https://github.com/GTs5Devy/LSTM_EE

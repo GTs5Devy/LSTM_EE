@@ -5,9 +5,8 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
-from dataset_lstm import FEATURES, LABEL_MAP, SPLITS, read_csv, build_windows, DrivingTimeSeriesDataset
-from model_lstm import HandlingLSTM
-from model_rnn import HandlingRNN
+from dataset_lstm import FEATURES, LABEL_MAP, SPLITS, WINDOW_CONFIG, read_csv, build_windows, DrivingTimeSeriesDataset
+from experiment_config import DEFAULT_RESULTS, PROTOCOL_ID, MODEL_KINDS, writable_output, make_model
 
 def metrics(y,p):
     cm = np.zeros((3,3),dtype=int)
@@ -29,14 +28,19 @@ def predict(model,loader):
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--epochs',type=int,default=30); ap.add_argument('--seeds',type=int,nargs='+',default=[42,43,44,45,46])
-    ap.add_argument('--models',nargs='+',choices=['lstm','rnn'],default=['lstm','rnn'])
-    ap.add_argument('--out',default='results_future'); ap.add_argument('--prepare-only',action='store_true')
-    args=ap.parse_args(); out=Path(args.out); out.mkdir(exist_ok=True,parents=True)
+    ap.add_argument('--models',nargs='+',choices=MODEL_KINDS,default=MODEL_KINDS)
+    ap.add_argument('--out',default=DEFAULT_RESULTS); ap.add_argument('--prepare-only',action='store_true')
+    args=ap.parse_args(); out=writable_output(args.out)
+    if args.epochs < 1 or len(args.seeds) != len(set(args.seeds)) or len(args.models) != len(set(args.models)):
+        ap.error('Positive epochs and unique seeds/models required')
+    if (out/'metrics.json').exists() or list(out.glob('*.pth')):
+        raise ValueError('Completed/partial training outputs exist; use a fresh output directory')
+    out.mkdir(exist_ok=True,parents=True)
     torch.set_num_threads(4); torch.use_deterministic_algorithms(True)
     dry=read_csv('data/dry_laps.csv')
     assert set(dry.Lap.unique()) == set(sum(SPLITS.values(),[]))
     assert len(sum(SPLITS.values(),[])) == len(set(sum(SPLITS.values(),[])))
-    raw={k:build_windows(dry,v) for k,v in SPLITS.items()}
+    raw={k:build_windows(dry,v,**WINDOW_CONFIG) for k,v in SPLITS.items()}
     mean=raw['train'][0].mean(axis=(0,1),dtype=np.float64)
     std=raw['train'][0].std(axis=(0,1),dtype=np.float64); std[std<1e-8]=1
     np.savez(out/'scaler.npz',mean=mean,std=std)
@@ -44,6 +48,16 @@ def main():
     if np.any(counts==0): raise ValueError('Training split lacks a class')
     weights=counts.sum()/(3*counts)
     manifest={'splits':SPLITS,'features':FEATURES,'class_order':list(LABEL_MAP),'horizon_ms':250,'input_frames':30,'persistence_frames':3,'max_gap_ms':50,'scaler_source':'dry training windows only','class_weights':weights.tolist(),'args':vars(args),'versions':{'python':platform.python_version(),'torch':torch.__version__,'numpy':np.__version__,'pandas':pd.__version__},'sha256':{}}
+    manifest.update(protocol_id=PROTOCOL_ID, window_config=WINDOW_CONFIG,
+                    primary_metrics=['macro_f1','per_class_precision','per_class_recall'],
+                    supplementary_metrics=['accuracy'],
+                    optional_controls={'last_frame':'12->64 ReLU, dropout 0.3, 64->3; last observation only',
+                                       'event_evaluation':'event_protocol.json, fixed before wet evaluation'},
+                    source_sha256={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('.').glob('*.py')},
+                    labeler_source_sha256={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('labeling_source').glob('*.py')},
+                    status='prepared')
+    from event_evaluation import EVENT_PROTOCOL
+    (out/'event_protocol.json').write_text(json.dumps(EVENT_PROTOCOL,indent=2))
     for path in Path('data').glob('*.csv'): manifest['sha256'][str(path)]=hashlib.sha256(path.read_bytes()).hexdigest()
     for k,(x,y,m) in raw.items():
         c=np.bincount(y,minlength=3); print(k,'laps',SPLITS[k],'counts',c.tolist(),flush=True)
@@ -58,7 +72,7 @@ def main():
     for kind in args.models:
         for seed in args.seeds:
             random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
-            model=HandlingLSTM() if kind=='lstm' else HandlingRNN()
+            model=make_model(kind)
             optimizer=torch.optim.Adam(model.parameters(),lr=0.001)
             criterion=torch.nn.CrossEntropyLoss(weight=torch.tensor(weights,dtype=torch.float32))
             train=DataLoader(ds['train'],batch_size=32,shuffle=True,generator=torch.Generator().manual_seed(seed))
@@ -76,16 +90,19 @@ def main():
                 if val<best:
                     best=val; best_epoch=epoch; state=copy.deepcopy(model.state_dict())
                 print(kind,seed,epoch,'val loss',round(val,5),flush=True)
-            torch.save({'state_dict':state,'kind':kind,'seed':seed,'best_epoch':best_epoch,'parameters':sum(p.numel() for p in model.parameters())},out/f'{kind}_{seed}.pth')
+            torch.save({'state_dict':state,'kind':kind,'seed':seed,'best_epoch':best_epoch,'parameters':sum(p.numel() for p in model.parameters()),'protocol_id':PROTOCOL_ID},out/f'{kind}_{seed}.pth')
             pd.DataFrame(history).to_csv(out/f'{kind}_{seed}_history.csv',index=False)
-    wet=read_csv('data/wet_laps.csv'); wx,wy,wm=build_windows(wet,sorted(wet.Lap.unique()))
+    manifest['status']='checkpoints_frozen_before_wet'
+    manifest['checkpoint_sha256']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.pth')}
+    (out/'manifest.json').write_text(json.dumps(manifest,indent=2))
+    wet=read_csv('data/wet_laps.csv'); wx,wy,wm=build_windows(wet,sorted(wet.Lap.unique()),**WINDOW_CONFIG)
     pd.DataFrame(wm).to_csv(out/'wet_test_samples.csv',index=False)
     loaders['wet_test']=DataLoader(DrivingTimeSeriesDataset(wx,wy,mean,std),batch_size=32)
     manifest['wet_test']={'laps':sorted(int(v) for v in wet.Lap.unique()),'counts':np.bincount(wy,minlength=3).tolist()}
     for kind in args.models:
         for seed in args.seeds:
             ck=torch.load(out/f'{kind}_{seed}.pth',weights_only=True)
-            model=HandlingLSTM() if kind=='lstm' else HandlingRNN(); model.load_state_dict(ck['state_dict'])
+            model=make_model(kind); model.load_state_dict(ck['state_dict'])
             for domain in ['dry_test','wet_test']:
                 y=raw[domain][1] if domain=='dry_test' else wy
                 p=predict(model,loaders[domain]); r=metrics(y,p)
@@ -96,6 +113,7 @@ def main():
     table=pd.DataFrame([{k:v for k,v in r.items() if k!='confusion_matrix'} for r in all_results]); table.to_csv(out/'metrics.csv',index=False)
     cols=[c for c in table if c not in ['model','seed','domain','best_epoch','parameters']]
     table.groupby(['model','domain'])[cols].agg(['mean','std']).to_csv(out/'aggregate.csv')
+    manifest['status']='complete'
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2))
     print(table[['model','seed','domain','accuracy','macro_f1']].to_string(index=False),flush=True)
 if __name__=='__main__': main()

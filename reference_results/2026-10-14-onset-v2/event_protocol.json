@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "eligible_event": "distinct first-confirmed onset represented by a positive eligible window target",
+  "detected_event": "at least one matching-class prediction in an eligible window ending strictly before onset and at most 250 ms earlier",
+  "warning": "argmax Understeer or Oversteer; no probability threshold",
+  "warning_episode": "consecutive eligible windows of same non-Neutral predicted class, same lap, end-time gap <=50 ms; Neutral prediction breaks episode",
+  "false_warning_episode": "episode containing no correct prediction of the first confirmed future onset",
+  "eligible_exposure": "sum of end-time increments <=50 ms between adjacent eligible windows in the same lap",
+  "rates": "false episodes per recorded lap, per recorded minute, and per eligible-monitoring minute",
+  "max_gap_ms": 50,
+  "horizon_ms": 250,
+  "persistence": 3,
+  "scope": "conditional on Neutral-history eligibility; full raw onsets are counted separately, not silently treated as forecastable"
+}

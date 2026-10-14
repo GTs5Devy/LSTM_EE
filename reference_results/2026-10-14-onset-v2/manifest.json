@@ -1,0 +1,186 @@
+{
+  "splits": {
+    "train": [
+      1,
+      2,
+      3,
+      4,
+      6
+    ],
+    "validation": [
+      8
+    ],
+    "dry_test": [
+      9,
+      11
+    ]
+  },
+  "features": [
+    "YawRate",
+    "LateralAccel",
+    "LongitudinalAccel",
+    "SteerAngle",
+    "Speed",
+    "WheelSlipFL",
+    "WheelSlipFR",
+    "WheelSlipRL",
+    "WheelSlipRR",
+    "Throttle",
+    "Brake",
+    "SlipDiff"
+  ],
+  "class_order": [
+    "Neutral",
+    "Understeer",
+    "Oversteer"
+  ],
+  "horizon_ms": 250,
+  "input_frames": 30,
+  "persistence_frames": 3,
+  "max_gap_ms": 50,
+  "scaler_source": "dry training windows only",
+  "class_weights": [
+    0.3538912178867032,
+    7.091545503500269,
+    30.0662100456621
+  ],
+  "args": {
+    "epochs": 30,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "models": [
+      "lstm",
+      "rnn",
+      "last_frame"
+    ],
+    "out": "results_onset_v2",
+    "prepare_only": false
+  },
+  "versions": {
+    "python": "3.14.2",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.4.2",
+    "pandas": "3.0.1"
+  },
+  "sha256": {
+    "data\\dry_laps.csv": "635650865b9f903925d0f50c2de8fb6962e8d69dd14d255ed4e51ebc7843c724",
+    "data\\wet_laps.csv": "a69b31ecfd21a60c5f3f97f364cc3aae043e0d525c6b43f56430d05d32ba78b4"
+  },
+  "protocol_id": "onset_within_250ms_v2",
+  "window_config": {
+    "sequence_length": 30,
+    "horizon_ms": 250,
+    "persistence": 3,
+    "max_gap_ms": 50,
+    "confirmation_policy": "onset_within_horizon"
+  },
+  "primary_metrics": [
+    "macro_f1",
+    "per_class_precision",
+    "per_class_recall"
+  ],
+  "supplementary_metrics": [
+    "accuracy"
+  ],
+  "optional_controls": {
+    "last_frame": "12->64 ReLU, dropout 0.3, 64->3; last observation only",
+    "event_evaluation": "event_protocol.json, fixed before wet evaluation"
+  },
+  "source_sha256": {
+    "audit_pipeline.py": "b950d476f99cfd6cc3c893a155cf4362ca2c50c1758fcc01535c43aa05930269",
+    "check_csv.py": "a5ea93151e5588d543ae99d212459f2a0c6a846031efc22c654a68cb33a0a8d6",
+    "dataset_lstm.py": "c9a1a53b93a56b461dc8d3042d2078602e73b53cb09c3cd280a3312fd13c47df",
+    "diagnose_samples.py": "9f63b631047b88a4a71c3a0a981268cbde870751fdce6f901b9f9ee8ccd68b01",
+    "event_evaluation.py": "c1baced8bf02c269c259964f2779f05bb612d2f1a3bab61960328f3469c12042",
+    "experiment_config.py": "892ee90f400c6097c3054a723481d2c5bdbda1c407c1433bef2a204c144638a6",
+    "model_last_frame.py": "1ecb5c73b10d8e845d2863dbd01609d621b530b8ca7e44b7a579b6b385d97451",
+    "model_lstm.py": "f8ac8fa75c244df9affa934bd4eecd9889cece3c4ffa0ee9423c45d0496ec57e",
+    "model_rnn.py": "6c1101f53e0e0b8c605edcf2e6db1f9ad5947c3c7b368175be900c7e8bbff11e",
+    "report_results.py": "01cd2cebef829997074c4480f69d9486a223e23fb90dfdb4e4452eaaf19be056",
+    "testwet_lstm.py": "3def930ed4c4af9dc008aab70853ff11e1aaebd02c544e7a23d3b8776aad0eea",
+    "test_pipeline.py": "52e9f21291148d87a0778cdfbe5021806f13c14a935aaaa2dc4a90ea3e58e8ad",
+    "train_lstm.py": "95243c2d3e9b1572dcbedaa0038eeeb0cd85f8351ae07216377a4095018d8996",
+    "verify_labeler.py": "972545837f19c3f329a07f0dea0a27113e35d2e618e06cff1be74eede37592b3"
+  },
+  "labeler_source_sha256": {
+    "labeling_source\\LapTimeML_github_v2.py": "28d0177cc595339bc4e441b8a45447db36ee15fd9ad921ee408a6a47f7331fd5",
+    "labeling_source\\LapTimeML_installed_v3.py": "b75f3a545feab1d08b5dc9ff549bb50f1f2202ddf7b6d235cc22c9e3daf2ef1a"
+  },
+  "status": "complete",
+  "train": {
+    "counts": [
+      12404,
+      619,
+      146
+    ],
+    "percentages": [
+      94.190902877971,
+      4.700432834687524,
+      1.1086642873414838
+    ]
+  },
+  "validation": {
+    "counts": [
+      2326,
+      140,
+      23
+    ],
+    "percentages": [
+      93.45118521494577,
+      5.62474889513861,
+      0.9240658899156288
+    ]
+  },
+  "dry_test": {
+    "counts": [
+      4897,
+      291,
+      40
+    ],
+    "percentages": [
+      93.66870696250956,
+      5.5661820964039785,
+      0.7651109410864575
+    ]
+  },
+  "checkpoint_sha256": {
+    "last_frame_42.pth": "29fd8d69df90d30fe1acc7f44874eeee3e77346c94bf71ef388bde5a66cc0c34",
+    "last_frame_43.pth": "92348876cf9ab1dcf77fda9d5227524b7c5efdae931477f49c94b121ed28189f",
+    "last_frame_44.pth": "156c5c41fd2720ac8dec8853c4362c0ef17a445976f2d19e5e08d63ab1656a48",
+    "last_frame_45.pth": "b5513fc1a15ac76621b76e7de5cab02dc92cf5d7f540039311c1e380cfb50aac",
+    "last_frame_46.pth": "76602a18c217845455bb3caa434ceef2ad954b6ae0f90212a4ac8372f53b0cfd",
+    "lstm_42.pth": "2920b70c39bac17a0de2ec8b713df5fa4032b646411689c5feaadfb218f54b57",
+    "lstm_43.pth": "e8aa9a1f5b744d942dcaf53fb02ca9a8c654f3852a18c35e35c7a613ec8401d0",
+    "lstm_44.pth": "35e1f24efea83dd90159a54030c1e3472cae06e19c1d250c49bfca83f34dc3ac",
+    "lstm_45.pth": "ca66c202562a02ed0540e8fed46c0595c7ab471d97ac8742a0c579fdeac371b3",
+    "lstm_46.pth": "0393c74b52eb421ac9393a31d78330acd67f88fb5acf89b5ea40e78d640d2b50",
+    "rnn_42.pth": "21a0dd3bb588419320d291d68e2213ed3f9c630e62dda9600b6aca7d717b4f70",
+    "rnn_43.pth": "aa6938dbc6bd078da40856dde2cf975dc8cb63360b71df4e615999e6c8b0143d",
+    "rnn_44.pth": "357b89a364f79fbd32756556beeb37fc7be88ebe046cb9002ee7cd3f8b5b5c94",
+    "rnn_45.pth": "40579ba7498e4174de1f13b363f89c27b3daf529393a83b531be1f1b9fda5516",
+    "rnn_46.pth": "f76255a7b726b80883ebe14ceea504167f62c7c80ddbb50a637f036356ce65a3"
+  },
+  "wet_test": {
+    "laps": [
+      1,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "counts": [
+      19567,
+      1061,
+      287
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+# Preserve recovered provenance copies exactly, including their original whitespace.
+labeling_source/*.py -text whitespace=-blank-at-eol

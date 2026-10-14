@@ -1,0 +1,5 @@
+split,old_windows,new_windows,dropped,changed_targets,Neutral_to_Understeer,Neutral_to_Oversteer
+train,13176,13169,7,97,83,14
+validation,2491,2489,2,22,20,2
+dry_test,5229,5228,1,44,40,4
+wet_test,20923,20915,8,179,145,34

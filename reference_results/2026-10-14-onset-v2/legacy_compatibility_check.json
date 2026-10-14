@@ -1,0 +1,5 @@
+{
+  "checkpoints": 10,
+  "exact_wet_metric_and_confusion_reproduction": true,
+  "archive_written": false
+}
